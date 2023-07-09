@@ -1,14 +1,14 @@
-import { useRef, ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState, useTransition } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import { useDebounce } from "./hooks/useDebounce";
 import "./App.css";
 import { usePrevious } from "./hooks/usePrevious";
 
 function App() {
 	const [count, setCount] = useState(0);
 	const [input, setInput] = useState("");
-
+	const [list, setList] = useState<string[]>([]);
+	const [isPending, startTransition] = useTransition();
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setInput(value);
@@ -16,7 +16,16 @@ function App() {
 
 	const prevValue = usePrevious(count);
 
-	const debounce = useDebounce(handleChange, 3000);
+	// const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+	// 	setInput(e.target.value);
+	// 	startTransition(() => {
+	// 		const l = [];
+	// 		for (let i = 0; i < 10000; i++) {
+	// 			l.push(e.target.value);
+	// 		}
+	// 		setList(l);
+	// 	});
+	// };
 
 	return (
 		<>
@@ -34,7 +43,7 @@ function App() {
 					count is {count}
 				</button>
 				<span>prevValue:{prevValue}</span>
-				<input onChange={debounce} />
+				<input />
 			</div>
 			<p className='read-the-docs'>
 				Click on the Vite and React logos to learn more
