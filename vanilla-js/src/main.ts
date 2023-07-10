@@ -3,6 +3,7 @@ import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
 import { setupCounter } from "./counter.ts";
 import { handleFetchWithTimeout } from "./fetchTimeout.ts";
+import { cachedApiCall } from "./cacheApiCall.ts";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
@@ -16,6 +17,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div class="card">
       <button id="counter" type="button"></button>
       <button id="fetchWithTimeout" type="button">fetchWithTimeout</button>
+      <button id="catcheCall" type="button">catcheCall</button>
     </div>
     <p class="read-the-docs">
       Click on the Vite and TypeScript logos to learn more
@@ -32,3 +34,12 @@ document
 			.then(res => console.log("response", res))
 			.catch(err => console.log("error", err))
 	);
+
+document
+	.querySelector<HTMLButtonElement>("#catcheCall")
+	?.addEventListener("click", () => {
+		const call = cachedApiCall();
+		call("https://jsonplaceholder.typicode.com/posts")
+			.then(res => console.log("response", res))
+			.catch(err => console.log("error", err));
+	});
