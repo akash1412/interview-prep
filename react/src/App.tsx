@@ -1,14 +1,15 @@
-import { ChangeEvent, useState, useTransition } from "react";
+import { ChangeEvent, useRef, useState, useTransition } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { usePrevious } from "./hooks/usePrevious";
+import Search from "./components/Search";
 
 function App() {
 	const [count, setCount] = useState(0);
 	const [input, setInput] = useState("");
 	const [list, setList] = useState<string[]>([]);
-	const [isPending, startTransition] = useTransition();
+	const timerId = useRef<undefined | number>();
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setInput(value);
@@ -27,6 +28,15 @@ function App() {
 	// 	});
 	// };
 
+	const handleIncrementCounter = () => {
+		timerId.current = setInterval(() => {
+			setCount(prev => prev + 1);
+		}, 1000);
+	};
+
+	const clearTimer = () => {
+		clearInterval(timerId?.current);
+	};
 	return (
 		<>
 			<div>
@@ -42,12 +52,14 @@ function App() {
 				<button onClick={() => setCount(count => count + 1)}>
 					count is {count}
 				</button>
+
 				<span>prevValue:{prevValue}</span>
-				<input />
+				<div>
+					<button onClick={handleIncrementCounter}>count is {count}</button>
+					<button onClick={clearTimer}>count is {count}</button>
+				</div>
+				<Search />
 			</div>
-			<p className='read-the-docs'>
-				Click on the Vite and React logos to learn more
-			</p>
 		</>
 	);
 }
